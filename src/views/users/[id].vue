@@ -25,6 +25,13 @@
                 <Label :for="role.value">{{ t(role.label) }}</Label>
             </div>
         </div>
+        <div v-if="form.role === 'user'">
+            <Button @click="modals.permissions.open">{{ t('users.permissions') }}</Button>
+        </div>
+        <div v-if="form.role === 'guest'">
+            <Label>{{ t('users.expiry_date') }}</Label>
+            <DatePicker v-model="form.expiryDate" placeholder="YYYY-MM-DD" />
+        </div>
         <div>
             <Label>{{ t('users.remarks') }}</Label>
             <Textarea v-model="form.remarks"></Textarea>
@@ -33,9 +40,17 @@
             <Checkbox id="isActive" v-model="form.isActive" />
             <Label for="isActive">{{ form.isActive ? t('users.is_active_true') : t('users.is_active_false') }}</Label>
         </div>
-        <Button type="button">{{ t('button.save') }}<span v-if="isSpinning">...</span></Button>
+        <Button type="submit" :disabled="isLoading">{{ t('button.save') }}<span v-if="isSpinning">...</span></Button>
+        <Button v-can="'users:delete'" @click="onDelete()">{{ t('button.delete') }}</Button>
         <Button @click="onBack">{{ t('button.back') }}</Button>
     </Form>
+
+    <Permissions
+        :isOpen="modals.permissions.state.isOpen"
+        :modelValue="form.permissions"
+        @save="(permissions) => form.permissions = permissions"
+        @close="modals.permissions.close"
+    />
 </template>
 
 <script setup>
@@ -44,6 +59,7 @@ import { userService } from '@/services/userService';
 import { errorHandler } from '@/helpers/errorHandler';
 import { useLoading } from '@/composables/useLoading';
 import { useSpinning } from '@/composables/useSpinning';
+import { useModal } from '@/composables/useModal';
 import { useYup } from '@/composables/useYup';
 
 const route = useRoute();
@@ -51,6 +67,7 @@ const router = useRouter();
 const { t } = useI18n();
 const { isLoading, execute } = useLoading();
 const { isSpinning, spin } = useSpinning();
+const modals = reactive({ permissions: useModal() });
 const { errors, validate } = useYup();
 
 const roles = [
@@ -94,10 +111,28 @@ const onSave = async () => {
             await spin(async () => {
                 if (!routeId) await userService.create(form);
                 if (routeId) await userService.update(routeId, form);
+                addToast(t('message.save'));
             });
         });
     } catch (err) {
-        const error = errroHandler(err);
+        const error = errorHandler(err);
+        addToast(error.message, 'error');
+    }
+};
+
+const onDelete = async () => {
+    const ok = await confirm(t('confirm.delete'));
+    if (!ok) return;
+
+    try {
+        await execute(async () => {
+            await userService.delete(routeId);
+            addToast(t('message.delete'));
+            onBack();
+        });
+    } catch (err) {
+        const error = errorHandler(err);
+        addToast(error.message, 'error');
     }
 };
 

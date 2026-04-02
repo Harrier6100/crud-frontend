@@ -12,7 +12,10 @@ export default defineConfig(({ mode }) => {
 			vue(),
 			AutoImport({
 				imports: ['vue', 'vue-router', 'vue-i18n', 'pinia'],
-				dirs: [],
+				dirs: [
+					'src/composables/addToast.js',
+					'src/composables/confirm.js',
+				],
 				extensions: ['js'],
 				deep: true
 			}),
