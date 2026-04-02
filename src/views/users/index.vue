@@ -42,7 +42,7 @@ import { useDataTable } from '@/composables/useDataTableSync';
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { isLoading, execute } = useLoading();
+const { execute } = useLoading();
 
 const users = ref([]);
 const { keyword, page, pageCount, paginatedData, sortBy, orderBy } = useDataTable(users);

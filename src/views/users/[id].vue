@@ -30,7 +30,7 @@
         </div>
         <div v-if="form.role === 'guest'">
             <Label>{{ t('users.expiry_date') }}</Label>
-            <DatePicker v-model="form.expiryDate" placeholder="YYYY-MM-DD" />
+            <DatePicker v-model="form.expiryDate" placeholder="YYYY-MM-DD" :min="today" />
         </div>
         <div>
             <Label>{{ t('users.remarks') }}</Label>
@@ -41,7 +41,7 @@
             <Label for="isActive">{{ form.isActive ? t('users.is_active_true') : t('users.is_active_false') }}</Label>
         </div>
         <Button type="submit" :disabled="isLoading">{{ t('button.save') }}<span v-if="isSpinning">...</span></Button>
-        <Button v-can="'users:delete'" @click="onDelete()">{{ t('button.delete') }}</Button>
+        <Button v-can="'users:delete'" v-if="routeId" @click="onDelete()">{{ t('button.delete') }}</Button>
         <Button @click="onBack">{{ t('button.back') }}</Button>
     </Form>
 
@@ -55,6 +55,7 @@
 
 <script setup>
 import * as yup from 'yup';
+import dayjs from 'dayjs';
 import { userService } from '@/services/userService';
 import { errorHandler } from '@/helpers/errorHandler';
 import { useLoading } from '@/composables/useLoading';
@@ -69,6 +70,8 @@ const { isLoading, execute } = useLoading();
 const { isSpinning, spin } = useSpinning();
 const modals = reactive({ permissions: useModal() });
 const { errors, validate } = useYup();
+
+const today = dayjs().format('YYYY-MM-DD');
 
 const roles = [
     { value: 'admin', label: 'users.role_admin' },
@@ -97,8 +100,8 @@ onMounted(async () => {
     if (!routeId) return;
 
     await execute(async () => {
-        const data = await userService.get(routeId);
-        Object.assign(form, data);
+        const user = await userService.get(routeId);
+        Object.assign(form, user);
     });
 });
 
@@ -111,12 +114,12 @@ const onSave = async () => {
             await spin(async () => {
                 if (!routeId) await userService.create(form);
                 if (routeId) await userService.update(routeId, form);
-                addToast(t('message.save'));
+                addToast(t('success.save'));
             });
         });
     } catch (err) {
         const error = errorHandler(err);
-        addToast(error.message, 'error');
+        addToast(t(error.message), 'error');
     }
 };
 
@@ -127,17 +130,19 @@ const onDelete = async () => {
     try {
         await execute(async () => {
             await userService.delete(routeId);
-            addToast(t('message.delete'));
+            addToast(t('success.delete'));
             onBack();
         });
     } catch (err) {
         const error = errorHandler(err);
-        addToast(error.message, 'error');
+        addToast(t(error.message), 'error');
     }
 };
 
 const onBack = () => {
-    const { from } = route.query;
-    router.push(from ?? { name: 'Users' });
+    router.push(
+        route.query.from ??
+        { name: 'Users' }
+    );
 };
 </script>

@@ -1,9 +1,8 @@
 export const errorHandler = (err) => {
     if (!err.response) {
-        const { message } = err;
-        return { message };
+        return { message: err.message };
     }
 
     const { status, message } = err.response.data;
-    return { status, message };
+    return { status, message: message ? `error.${message.toLowerCase()}` : 'error.unknown' };
 };

@@ -10,16 +10,18 @@
             <template v-else>
                 <div @click="popMenu"><i class="fa fa-chevron-left"></i></div>
                 <template v-for="menu in menus" :key="menu.routeNext || menu.routeName">
-                    <div v-if="menu.routeNext" @click="pushMenu(menu.routeNext)">
-                        {{ t(menu.label) }}<i class="fa fa-chevron-right"></i>
+                    <div>
+                        <div v-if="menu.routeNext" @click="pushMenu(menu.routeNext)">
+                            {{ t(menu.label) }}<i class="fa fa-chevron-right"></i>
+                        </div>
+                        <router-link
+                            v-else-if="menu.routeName"
+                            :to="{ name: menu.routeName }"
+                            @click="$emit('close')"
+                        >
+                            {{ t(menu.label) }}
+                        </router-link>
                     </div>
-                    <router-link
-                        v-else-if="menu.routeName"
-                        :to="{ name: menu.routeName }"
-                        @click="$emit('close')"
-                    >
-                        {{ t(menu.label) }}
-                    </router-link>
                 </template>
             </template>
         </div>

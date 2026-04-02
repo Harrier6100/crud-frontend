@@ -4,14 +4,14 @@
             <Button @click="emit('close')">{{ t('button.close_x') }}</Button>
             <Form @submit.prevent="onLogin">
                 <div>
-                    <Input v-model="form.id" :placeholder="t('label.id')" />
+                    <Input v-model="form.id" :placeholder="t('placeholder.id')" />
                     <Message :error="errors.id" />
                 </div>
                 <div>
-                    <Input v-model="form.password" type="password" :placeholder="t('label.password')" />
+                    <Input v-model="form.password" type="password" :placeholder="t('placeholder.password')" />
                     <Message :error="errors.password" />
                 </div>
-                <Button type="submit"><span v-if="isSpinning">...</span>{{ t('button.login') }}</Button>
+                <Button type="submit">{{ t('button.login') }}<span v-if="isSpinning">...</span></Button>
                 <Message :error="errors.form" />
             </Form>
         </div>
@@ -43,14 +43,15 @@ const form = reactive({
 });
 
 const schema = yup.object({
-    id: yup.string().required().label('label.id'),
-    password: yup.string().required().label('label.password'),
+    id: yup.string().required().label(t('placeholder.id')),
+    password: yup.string().required().label(t('placeholder.password')),
 });
 
 watch(() => props.isOpen, (isOpen) => {
     if (!isOpen) {
         form.id = '';
         form.password = '';
+        errors.value = {};
     }
 });
 
@@ -67,7 +68,7 @@ const onLogin = async () => {
         });
     } catch (err) {
         const error = errorHandler(err);
-        errors.value.form = error.message;
+        errors.value.form = t(error.message);
     }
 };
 </script>

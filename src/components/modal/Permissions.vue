@@ -17,7 +17,7 @@
             </table>
             <Pagination v-model:page="page" :pageCount="pageCount" />
             <Button @click="onSave">{{ t('button.save') }}</Button>
-            <Button @click="$emit('close')">{{ t('button.close') }}</Button>
+            <Button @click="onClose">{{ t('button.close') }}</Button>
         </div>
     </teleport>
 </template>
@@ -46,12 +46,17 @@ onMounted(async () => {
     permissions.value = await permissionService.fetch();
 });
 
-watch(() => props.isOpen, (open) => {
-    if (open) selected.value = [...props.modelValue];
+watch(() => props.isOpen, (isOpen) => {
+    if (isOpen) selected.value = [...props.modelValue];
 }, { immediate: true });
 
 const onSave = () => {
     emit('save', selected.value);
+    emit('close');
+};
+
+const onClose = () => {
+    page.value = 1;
     emit('close');
 };
 </script>
