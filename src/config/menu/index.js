@@ -4,15 +4,29 @@ export default {
             label: 'menu.admin',
             routeNext: 'admin',
         },
+        {
+            label: 'menu.purchase',
+            routeNext: 'purchase',
+        },
     ],
     admin: [
         {
-            label: 'menu.users',
-            routeName: 'Users',
+            label: 'menu.permissions',
+            routeName: 'Permissions',
         },
         {
             label: 'menu.translations',
             routeName: 'Translations',
         },
+        {
+            label: 'menu.users',
+            routeName: 'Users',
+        },
+    ],
+    purchase: [
+        {
+            label: 'menu.purchase_orders',
+            routeName: 'PurchaseOrders',
+        }
     ],
 };

@@ -2,7 +2,7 @@ export default [
     {
         path: '/translations',
         name: 'Translations',
-        component: () => import('@/views/translations/index.vue'),
+        component: () => import('@/views/crud/translations/index.vue'),
         meta: {
             requiresAuth: true,
             permission: 'translations:read',
@@ -11,7 +11,7 @@ export default [
     {
         path: '/translations/new',
         name: 'Translations[new]',
-        component: () => import('@/views/translations/[id].vue'),
+        component: () => import('@/views/crud/translations/[id].vue'),
         meta: {
             requiresAuth: true,
             permission: 'translations:create',
@@ -20,7 +20,7 @@ export default [
     {
         path: '/translations/:id',
         name: 'Translations[id]',
-        component: () => import('@/views/translations/[id].vue'),
+        component: () => import('@/views/crud/translations/[id].vue'),
         meta: {
             requiresAuth: true,
             permission: 'translations:update',

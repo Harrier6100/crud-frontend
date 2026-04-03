@@ -11,7 +11,7 @@
                     <Input v-model="form.password" type="password" :placeholder="t('placeholder.password')" />
                     <Message :error="errors.password" />
                 </div>
-                <Button type="submit">{{ t('button.login') }}<span v-if="isSpinning">...</span></Button>
+                <Button type="submit" :disabled="isLoading">{{ t('button.login') }}<span v-if="isSpinning">...</span></Button>
                 <Message :error="errors.form" />
             </Form>
         </div>

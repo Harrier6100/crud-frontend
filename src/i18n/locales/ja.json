@@ -20,6 +20,7 @@
     "logout": "ログアウトしますか？"
   },
   "error": {
+    "filter_required": "検索条件を入力してください。",
     "invalid_credentials": "IDまたはパスワードが正しくありません。",
     "user_expired": "アカウントの有効期限が切れています。"
   },
@@ -45,7 +46,8 @@
     "permissions": "権限マスタ",
     "permissions_id": "@:{'menu.permissions'}[編集]",
     "permissions_new": "@:{'menu.permissions'}[新規]",
-    "purchase_orders": "発注",
+    "purchase": "発注",
+    "purchase_orders": "発注データ",
     "translations": "翻訳マスタ",
     "translations_id": "@:{'menu.translations'}[編集]",
     "translations_new": "@:{'menu.translations'}[新規]",

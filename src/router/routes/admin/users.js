@@ -2,7 +2,7 @@ export default [
     {
         path: '/users',
         name: 'Users',
-        component: () => import('@/views/users/index.vue'),
+        component: () => import('@/views/crud/users/index.vue'),
         meta: {
             requiresAuth: true,
             permission: 'users:read',
@@ -11,7 +11,7 @@ export default [
     {
         path: '/users/new',
         name: 'Users[new]',
-        component: () => import('@/views/users/[id].vue'),
+        component: () => import('@/views/crud/users/[id].vue'),
         meta: {
             requiresAuth: true,
             permission: 'users:create',
@@ -20,7 +20,7 @@ export default [
     {
         path: '/users/:id',
         name: 'Users[id]',
-        component: () => import('@/views/users/[id].vue'),
+        component: () => import('@/views/crud/users/[id].vue'),
         meta: {
             requiresAuth: true,
             permission: 'users:update',
